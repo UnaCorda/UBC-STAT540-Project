@@ -1,0 +1,11 @@
+.children.RData
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# Downloaded data files too big to upload to GitHub and files
+*.RData
+*.txt
+*.gz
+GO.xml
+Generic_human

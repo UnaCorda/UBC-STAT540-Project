@@ -1,0 +1,40 @@
+---
+title: "Proposal"
+author: "The ATGC Team"
+date: '`r format(Sys.time(), "%a %b %d, %Y")`'
+output: github_document
+bibliography: STAT540.bib
+csl: biomed-central.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+## Motivation and background work
+
+The Global Burden of Disease Study in 2016 found that diarrhoeal diseases ranked eighth among the leading causes of deaths at any age, and fifth for deaths of children younger than 5 years of age [@TroegerEtAl2018]. Moreover, according to the World Health Organization, in 2017 diarrhoea was the leading cause of malnutrition in children under 5, the second leading cause of death, with about 525,000 deaths occurring annually in this age group [@WHO2017]. Diarrhoea in children can have various causes, including viral or bacterial pathogens or non-pathogenic causes. A recent study reported the use of RNA-Seq to identify genetic signatures that could be used to diagnose specific pathogenic agents responsible for cases of childhood diarrhoea [@DeBergEtAl2018]. Whole blood specimens were collected from 48 healthy children (controls) and 198 children with diarrhea caused by a single bacterial or viral pathogen as confirmed by pathogen-specific tests of stool samples. Children were included in the study if diagnosed with rotavirus (n=55), _E. coli_ (55), Salmonella (36), Shigella (37), adenovirus (8), or norovirus (7). The authors of the study focused on differential expression of genes related to chemokine receptors, inflammasome signaling and interferon response, looking at relationships between complement and interferon-stimulated gene expression with patient age and severity of illness, but did not mention any analyses of relationships between other pathways with age, severity or days post onset. We hypothesize that genes related to the host response to microorganism infection will be expressed differently based on host sex, and that the gene expression profile of each group can be quantitatively differentiated. We will build a parametric classifier to predict pathogen types even the severity of the disease, since the nonparametric method like PCA didn’t work well. 
+
+## Division of labour
+
+| Name | Background | Degree | Affiliations |	Job Assignments |
+|------|------------|--------|--------------|-----------------|
+| Sam Breaux | Pharmacogenomics, Microbiology | M.Sc. | Pharmaceutical Sciences	| data filtering, PCA, batch effects |
+| Yao Chen | Populational Pharmacokinetics | M.Sc. | Pharmaceutical Sciences | differentially expressed gene identification, classification model, poster design |
+| Fatema Tuz Jhohura | Biostatistics | M.Sc. |	Statistics | data exploration, model fitting	|
+| Tonya Severson | Sequencing, Entomology | M.Sc. | Genome Science and Technology | maintain bibliography, data exploration and visualization, presentation design |
+
+## Dataset
+
+The dataset [from @DeBergEtAl2018] was retrieved from GEO [@BarrettEtAl2013] and the recount2 database [@Collado-TorresEtAl2017] and contain counts of genes observed in each sample in a tidy format. Metadata included demographics (age, sex, height, weight) and clinical data captured for each patient (e.g., cell counts for eight types found in whole blood, WHO diarrhoea severity scores, highest temperature, duration of illness, and days post onset). Only samples that passed quality filtering in the initial study and that have complete clinical metadata will be used (193 of 208 original samples). The count data were derived from 58-cycle, single-read sequence data generated on a HiSeq 2500 (Illumina, CA) using libraries prepared from globin-reduced RNAs and Illumina TruSeq reagents. 
+
+## Aims and methodology
+
+1. We will prepare the data and perform QC and exploratory analyses to identify any problems with our dataset and confirm that we can reproduce initial analyses from the original paper [@DeBergEtAl2018]. Methods to assess quality will include visualization of expression levels for genes that exhibited differential expression in patients infected by different pathogens (e.g., CCR3, CXCR8, NLRC4, associated with Shigella, or IFI44 and OASL, associated with rotavirus), comparison of overall expression levels among samples to assess uniformity of coverage, and correlation heatmaps, and will be used to determine whether any outliers need to be removed from further analysis or if additional normalization is required.
+
+2. Perform differential gene expression analysis and look for enrichment of pathways or relationships between genes and clinical characteristics other than the ones identified in the original study. For example, do responses mounted by male and female children against pathogens differ? Does expression of any genes or pathways correspond to the highest temperatures, or is expression of any genes related to severity score, age or days post onset? For pathway enrichment, we could use EnrichR [@enrichr2016] and/or FGSEA [@fgsea2016] packages from Bioconductor [@bioconductor2004]. The pathway analysis could help us look into the mechanism of pathogenesis. 
+
+3. Build a classifier to predict pathogen type, based on differentially expressed genes. We will use Logistic Regression, SVM.
+
+## References
